@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden;
+            background: #faf8f5;
+            color: #2d2d2d;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .section {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.8s ease;
+            z-index: 0;
+        }
+
+        .section.active {
+            opacity: 1;
+            pointer-events: all;
+            z-index: 10;
+        }
+
+        /* ===== HI ===== */
+        #section-hi { background: #faf8f5; }
+
+        .hi-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 8rem;
+            font-weight: 700;
+            color: #2d2d2d;
+            letter-spacing: 8px;
+            opacity: 0;
+            transform: translateY(40px);
+        }
+
+        .hi-text.animate { animation: fadeSlideUp 1s ease forwards; }
+
+        @keyframes fadeSlideUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dot {
+            display: inline-block;
+            width: 8px; height: 8px;
+            background: #e8a87c;
+            border-radius: 50%;
+            margin-left: 8px;
+            animation: dotPulse 1.5s ease infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.6; }
+        }
+
+        /* ===== THANKS ===== */
+        #section-thanks { background: #faf8f5; }
+
+        .thanks-box {
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.9);
+        }
+
+        .thanks-box.animate { animation: softPop 0.8s ease forwards; }
+
+        @keyframes softPop {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .thanks-box h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            color: #2d2d2d;
+            margin-bottom: 12px;
+        }
+
+        .thanks-box p {
+            font-size: 1.1rem;
+            color: #666;
+            font-weight: 300;
+        }
+
+        .heart-line {
+            width: 60px; height: 2px;
+            background: #e8a87c;
+            margin: 20px auto;
+            border-radius: 2px;
+        }
+
+        /* ===== LETTER ===== */
+        #section-letter { background: #faf8f5; }
+
+        .letter-wrap {
+            max-width: 600px;
+            width: 85%;
+            background: #fff;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 50px 40px;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.04);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .letter-wrap.animate { animation: fadeSlideUp 0.9s ease forwards; }
+
+        .letter-wrap h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.6rem;
+            color: #2d2d2d;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+
+        .letter-wrap p {
+            font-size: 0.95rem;
+            line-height: 1.9;
+            color: #555;
+            margin-bottom: 14px;
+            text-align: justify;
+        }
+
+        .letter-signature {
+            text-align: right;
+            margin-top: 20px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.2rem;
+            color: #e8a87c;
+        }
+
+        /* ===== QUESTION ===== */
+        #section-question { background: #faf8f5; }
+
+        .question-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.4rem;
+            color: #2d2d2d;
+            margin-bottom: 60px;
+            text-align: center;
+            opacity: 0;
+            transform: scale(0.8);
+        }
+
+        #section-question.active .question-text {
+            animation: popIn 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+        }
+
+        @keyframes popIn {
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .buttons-area {
+            position: relative;
+            width: 420px;
+            height: 180px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: translateY(20px);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 24px;
+            background: rgba(255,255,255,0.4);
+        }
+
+        #section-question.active .buttons-area {
+            animation: fadeSlideUp 0.6s ease 0.4s forwards;
+        }
+
+        .btn {
+            padding: 16px 50px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            position: absolute;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .btn-yes {
+            background: #2d2d2d;
+            color: #faf8f5;
+            box-shadow: 0 4px 15px rgba(45,45,45,0.2);
+            z-index: 2;
+        }
+
+        .btn-yes:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(45,45,45,0.3);
+        }
+
+        .btn-no {
+            background: #ddd;
+            color: #666;
+            z-index: 3;
+            transition: all 0.15s ease-out;
+            pointer-events: auto;
+        }
+
+        .btn-no:hover {
+            background: #ccc;
+        }
+
+        /* ===== FINAL ===== */
+        #section-final { background: #faf8f5; }
+
+        .final-content {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .final-content.animate { animation: fadeSlideUp 1s ease forwards; }
+
+        .final-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            color: #2d2d2d;
+            margin-bottom: 16px;
+        }
+
+        .final-content p {
+            font-size: 1.1rem;
+            color: #777;
+            font-weight: 300;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        .success-msg {
+            position: fixed;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            background: #2d2d2d;
+            color: #faf8f5;
+            padding: 30px 50px;
+            border-radius: 16px;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            z-index: 2000;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+            transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .success-msg.show { transform: translate(-50%, -50%) scale(1); }
+
+        .confetti {
+            position: fixed;
+            width: 8px; height: 8px;
+            top: -10px;
+            z-index: 1999;
+            animation: confetti-fall 3s linear forwards;
+        }
+
+        @keyframes confetti-fall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .hi-text { font-size: 5rem; }
+            .thanks-box h2 { font-size: 2rem; }
+            .final-content h1 { font-size: 2rem; }
+            .letter-wrap { padding: 30px 20px; }
+            .question-text { font-size: 1.8rem; padding: 0 20px; }
+            .btn { padding: 14px 40px; font-size: 1rem; }
+            .buttons-area { width: 340px; height: 150px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Hi -->
+    <section class="section active" id="section-hi">
+        <div class="hi-text" id="hi-text">Hi<span class="dot"></span></div>
+    </section>
+
+    <!-- 2. Thanks -->
+    <section class="section" id="section-thanks">
+        <div class="thanks-box" id="thanks-box">
+            <h2>Thanks for being my friend</h2>
+            <div class="heart-line"></div>
+            <p>You mean more than you know.</p>
+        </div>
+    </section>
+
+    <!-- 3. Letter -->
+    <section class="section" id="section-letter">
+        <div class="letter-wrap" id="letter-wrap">
+            <h3>A Letter for You</h3>
+            <p>Dear Friend,</p>
+            <p>Some people come into our lives and make it brighter just by being there. You are one of those rare souls who turns ordinary moments into extraordinary memories.</p>
+            <p>Through every laugh, every shared secret, and every quiet moment of understanding, you've shown me what true friendship really means. It's not about the grand gestures — it's about the consistent presence, the unwavering support, and the genuine care.</p>
+            <p>Thank you for being the person who makes me believe that good things still exist in this world. Thank you for being you.</p>
+            <p>Here's to countless more adventures, endless laughter, and a friendship that only grows stronger with time.</p>
+            <div class="letter-signature">With love, always</div>
+        </div>
+    </section>
+
+    <!-- 4. Question -->
+    <section class="section" id="section-question">
+        <h2 class="question-text">Will you be my friend forever?</h2>
+        <div class="buttons-area" id="btn-area">
+            <button class="btn btn-yes" id="btn-yes" onclick="handleYes()">Yes</button>
+            <button class="btn btn-no" id="btn-no">No</button>
+        </div>
+    </section>
+
+    <!-- 5. Final -->
+    <section class="section" id="section-final">
+        <div class="final-content" id="final-content">
+            <h1>Thank you for being my friend</h1>
+            <p>Some bonds are simply meant to be. I'm grateful every single day that ours is one of them.</p>
+        </div>
+    </section>
+
+    <div class="success-msg" id="success-msg">Good! 💖</div>
+
+    <script>
+        const sections = ['section-hi', 'section-thanks', 'section-letter', 'section-question', 'section-final'];
+
+        function showSection(idx) {
+            sections.forEach((id, i) => {
+                document.getElementById(id).classList.toggle('active', i === idx);
+            });
+        }
+
+        function triggerAnimation(id, cls) {
+            const el = document.getElementById(id);
+            el.classList.remove(cls);
+            void el.offsetWidth;
+            el.classList.add(cls);
+        }
+
+        // Start
+        triggerAnimation('hi-text', 'animate');
+
+        // Auto timeline
+        setTimeout(() => { showSection(1); triggerAnimation('thanks-box', 'animate'); }, 3000);
+        setTimeout(() => { showSection(2); triggerAnimation('letter-wrap', 'animate'); }, 7000);
+        setTimeout(() => { showSection(3); }, 12000);
+
+        // ========== NO BUTTON LOGIC ==========
+        const btnNo = document.getElementById('btn-no');
+        const btnArea = document.getElementById('btn-area');
+        const btnYes = document.getElementById('btn-yes');
+
+        // Move No button to a random position within the area, avoiding Yes button
+        function moveNoAway() {
+            const areaRect = btnArea.getBoundingClientRect();
+            const btnW = btnNo.offsetWidth;
+            const btnH = btnNo.offsetHeight;
+            const pad = 12;
+
+            const maxLeft = areaRect.width - btnW - pad;
+            const maxTop = areaRect.height - btnH - pad;
+
+            // Yes button position relative to area
+            const yesRect = btnYes.getBoundingClientRect();
+            const yesLeft = yesRect.left - areaRect.left;
+            const yesTop = yesRect.top - areaRect.top;
+            const yesW = yesRect.width;
+            const yesH = yesRect.height;
+            const safeDist = 30; // minimum distance from Yes
+
+            let left, top, attempts = 0;
+            do {
+                left = pad + Math.random() * maxLeft;
+                top = pad + Math.random() * maxTop;
+                attempts++;
+
+                // Check distance from Yes button center
+                const yesCX = yesLeft + yesW / 2;
+                const yesCY = yesTop + yesH / 2;
+                const noCX = left + btnW / 2;
+                const noCY = top + btnH / 2;
+                const dist = Math.sqrt((noCX - yesCX) ** 2 + (noCY - yesCY) ** 2);
+
+                if (dist > (yesW / 2 + btnW / 2 + safeDist)) break;
+            } while (attempts < 50);
+
+            btnNo.style.left = left + 'px';
+            btnNo.style.top = top + 'px';
+        }
+
+        // Preemptive mouse tracking — move No before cursor reaches it
+        document.addEventListener('mousemove', (e) => {
+            if (!document.getElementById('section-question').classList.contains('active')) return;
+
+            const noRect = btnNo.getBoundingClientRect();
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+
+            // Distance from mouse to No button center
+            const noCX = noRect.left + noRect.width / 2;
+            const noCY = noRect.top + noRect.height / 2;
+            const dist = Math.sqrt((mouseX - noCX) ** 2 + (mouseY - noCY) ** 2);
+
+            // If mouse is within 80px of No button, move it away
+            if (dist < 80) {
+                moveNoAway();
+            }
+        });
+
+        // Also move on direct hover/touch
+        btnNo.addEventListener('mouseenter', moveNoAway);
+        btnNo.addEventListener('mouseover', moveNoAway);
+        btnNo.addEventListener('touchstart', (e) => { e.preventDefault(); moveNoAway(); });
+        btnNo.addEventListener('click', (e) => { e.preventDefault(); moveNoAway(); });
+
+        // Initialize position (top right, away from Yes)
+        setTimeout(() => {
+            const areaRect = btnArea.getBoundingClientRect();
+            const btnW = btnNo.offsetWidth;
+            const btnH = btnNo.offsetHeight;
+            btnNo.style.left = (areaRect.width - btnW - 15) + 'px';
+            btnNo.style.top = '15px';
+        }, 100);
+
+        // ========== YES BUTTON ==========
+        function handleYes() {
+            const msg = document.getElementById('success-msg');
+            msg.classList.add('show');
+
+            const colors = ['#e8a87c', '#c38d9e', '#85dcb0', '#e27d60', '#41b3a3'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const c = document.createElement('div');
+                    c.className = 'confetti';
+                    c.style.left = Math.random() * 100 + 'vw';
+                    c.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    c.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    c.style.width = (4 + Math.random() * 8) + 'px';
+                    c.style.height = c.style.width;
+                    c.style.animationDuration = (2 + Math.random() * 2) + 's';
+                    document.body.appendChild(c);
+                    setTimeout(() => c.remove(), 4000);
+                }, i * 30);
+            }
+
+            setTimeout(() => {
+                msg.classList.remove('show');
+                showSection(4);
+                triggerAnimation('final-content', 'animate');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
